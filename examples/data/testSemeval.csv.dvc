@@ -1,0 +1,7 @@
+md5: 899bc984a4fca2d7a7aa835a04d2f990
+outs:
+- md5: c74ee2f76d9df6d166cea6da98efffce
+  path: testSemeval.csv
+  cache: true
+  metric: false
+  persist: false
