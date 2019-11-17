@@ -5,15 +5,16 @@
 using SparseArrays
 
 module HDSparse
+
     import SparseArrays
     import SparseArrays.sparsevec
 
     BITFORMAT = Int64
 
-    function RandomGenerator(n, w)
+    function RandomGenerator(n::Int64, w::Int64)
         # generates random vector of form [0 0 0 ... 0 1 0 ... 0 1 0 0 0 ...]
         rand(1:n, w) |> sort |>
-            (ri -> sparsevec(ri, [1 for i=1:length(ri)]))
+            (ri -> sparsevec(ri, [1 for i=1:length(ri)], n))
     end
 
     function RandomGenerator(dict)
@@ -22,25 +23,41 @@ module HDSparse
 
     function superposition(vectorHD::Vector{SparseArrays.SparseVector{BITFORMAT,
                                                                       BITFORMAT}})
-        idces = unique(vcat(map(v -> v.nzind, vectorHD)...))
-        sparsevec(idces, map(i -> BITFORMAT(1), idces))
+        unique(vcat(map(v -> v.nzind, vectorHD)...)) |>
+            (Is -> sparsevec(Is,
+                             map(i -> BITFORMAT(1),
+                             Is)))
     end
 
     function superposition(vectorHD::Vector{SparseArrays.SparseVector{BITFORMAT,
                                                                       BITFORMAT}},
                            modelEncoding::Dict{Symbol,Int64})
         idces = unique(vcat(map(v -> v.nzind, vectorHD)...))
-        sparsevec(idces, map(i -> BITFORMAT(1), idces), modelEncoding[:N])
+        sparsevec(idces,
+                  map(i -> BITFORMAT(1), idces),
+                  modelEncoding[:N])
     end
 
     function superposition(vectorHD::Array{Array{BITFORMAT,1},1})
-        idces = sort(unique(vcat(vectorHD...)))
-        sparsevec(idces, map(i -> BITFORMAT(1), idces))
+        sort(unique(vcat(vectorHD...))) |>
+            (Is -> sparsevec(Is,
+                             map(i -> BITFORMAT(1),
+                             Is)))
     end
 
-    function superposition(vectorHD::Array{Array{BITFORMAT,1},1}, modelEncoding::Dict{Symbol,Int64})
-        idces = sort(unique(vcat(vectorHD...)))
-        sparsevec(idces, map(i -> BITFORMAT(1), idces), modelEncoding[:N])
+    function superposition(vectorHD::Array{Array{BITFORMAT,1},1}, n)
+        sort(unique(vcat(vectorHD...))) |>
+            (Is -> sparsevec(Is,
+                             map(i -> BITFORMAT(1), Is),
+                             n))
+    end
+
+    function superposition(vectorHD::Array{Array{BITFORMAT,1},1},
+                           modelEncoding::Dict{Symbol,Int64})
+        sort(unique(vcat(vectorHD...))) |>
+            (Is -> sparsevec(Is,
+                             map(i -> BITFORMAT(1), Is),
+                             modelEncoding[:N]))
     end
 
     function cosineSimilarity(ri1::SparseArrays.SparseVector{BITFORMAT,
