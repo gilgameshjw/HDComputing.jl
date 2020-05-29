@@ -83,4 +83,5 @@ module HDSparse
     end
 
 end
+
 export HDSparse

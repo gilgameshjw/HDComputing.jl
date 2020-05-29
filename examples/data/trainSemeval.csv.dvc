@@ -1,7 +1,0 @@
-md5: ed6ab8d500a9d343b3fcc518ffef5254
-outs:
-- md5: db7c2b572b85dce8f67825fbb90cbe40
-  path: trainSemeval.csv
-  cache: true
-  metric: false
-  persist: false
