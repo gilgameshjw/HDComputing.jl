@@ -80,7 +80,7 @@ function generateIndices(data, ce::CoarseEncoder, lat::Lattice)
                         getPos(data[d], ce.minimas[d], ce.maximas[d], lat.gridSizes[d]) |> 
                       round |> Int64), 
                 ce.dimensions) |> sum),
-        1:nLattices)
+        1:ce.nLattices)
     
 end
 
